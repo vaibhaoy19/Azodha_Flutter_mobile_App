@@ -1,29 +1,28 @@
 Health API Automation Project
 🎯 Objective
 
-This project demonstrates the ability to automate cloud deployments, containerize services, implement monitoring, and apply DevOps best practices in a healthcare technology environment.
+This project demonstrates automation of cloud deployments, containerization of services, CI/CD pipelines, monitoring, and security best practices in a healthcare technology environment.
 
-🧩 Assignment Summary
+🧩 Project Overview
+1. Containerized Service
 
-1. Containerize & Deploy a Simple Service
+A small API created in Python (Flask) with the following endpoints:
 
-API created in Python (Flask) with two endpoints:
-
-GET /health → returns status OK
-
-GET /predict → returns { "score": 0.75 }
+Endpoint	Response
+GET /health	{"status": "OK"}
+GET /predict	{"score": 0.75}
 
 Dockerfile Highlights:
 
 Multi-stage build
 
-Non-root user
+Runs as non-root user
 
-Healthcheck included
+Healthcheck enabled
 
 Dependencies installed via requirements.txt
 
-Dockerfile Example Snippet:
+Dockerfile Example:
 
 FROM python:3.10-slim AS build
 WORKDIR /app
@@ -38,10 +37,9 @@ USER appuser
 HEALTHCHECK CMD curl --fail http://localhost:5000/health || exit 1
 CMD ["python", "app.py"]
 
+2. CI/CD Pipeline (Jenkins)
 
-2. Minimal CI/CD Pipeline (Jenkins)
-
-CI Stages Implemented:
+Implemented Stages:
 
 Checkout code from GitHub
 
@@ -74,63 +72,59 @@ pipeline {
 }
 
 
-✅ Status: Successfully implemented and tested on Jenkins.
+Status: ✅ Successfully built and pushed Docker image.
+Pending: CD / Deployment to Kubernetes cluster (EKS not created yet).
 
-⚠️ CD / Deployment: Kubernetes deployment stage failed; EKS cluster not yet created.
+3. Monitoring
 
-3. Basic Monitoring
+Planned Monitoring:
 
-CloudWatch Metrics Planned: CPU, Memory, Error count
+Metrics: CPU, Memory, Error count
 
-Dashboard: Pending (to be created in CloudWatch/Grafana)
+Dashboard: CloudWatch / Grafana
 
-Alerts Planned: High CPU/memory usage, health check failures
+Alerts: High CPU/memory usage, health check failures
 
 4. Security Considerations
 
-IAM: Least-privilege principle will be applied
+IAM: Least-privilege roles
 
-Secrets: Stored in AWS Secrets Manager or SSM Parameter Store
+Secrets: Stored in AWS Secrets Manager / SSM
 
-Repository: No credentials included in code
+Code Repository: No credentials included
 
-HTTPS Enforcement: Planned explanation for API HTTPS enforcement
+HTTPS: API enforcement planned
 
-📂 Project Structure
+5. Project Structure
 health-api/
 │
-├── app/                 # Python Flask API code
+├── app/                 # Flask API code
 ├── requirements.txt     # Python dependencies
-├── Dockerfile           # Container build instructions
+├── Dockerfile           # Container instructions
 ├── Jenkinsfile          # CI/CD pipeline
 └── README.md
 
-📈 CI/CD Workflow
+6. CI/CD Workflow Diagram
+[GitHub Push] --> [Jenkins CI Pipeline]
+                  |--> Build & Test
+                  |--> Docker Image Build
+                  |--> Push to Docker Hub
+                  |--> (Pending) Deploy to Kubernetes
 
-Developer pushes code to GitHub
+7. Pending Work
 
-Jenkins pipeline triggers automatically
-
-Code is built and tested
-
-Docker image is built and pushed to Docker Hub
-
-(Pending) Deployment to Kubernetes cluster (EKS)
-
-📝 Notes / Pending Work
-
-Kubernetes deployment manifest & EKS cluster creation
+Kubernetes deployment (EKS cluster)
 
 CloudWatch / Grafana dashboard & alerts
 
-Full security enforcement configuration
+Full security enforcement & HTTPS
 
-📦 Submission
+8. Submission
 
-GitHub Repo: [Link to your repo]
+GitHub Repo: [Link to repo]
 
-IaC Code: (Pending Kubernetes manifests / Terraform)
+IaC Code: Pending Kubernetes manifests / Terraform
 
-Screenshots: Jenkins pipeline success captured; other pending
+Screenshots: Jenkins pipeline success (Docker build & push completed)
 
 Prepared By: Vaibhao Yenchalwar
