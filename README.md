@@ -2,7 +2,7 @@
 
 ## Overview
 This project demonstrates a production-ready DevOps workflow for a healthcare-style microservice.
-The solution covers containerization, CI/CD automation, Kubernetes deployment design, monitoring,
+It covers containerization, CI/CD automation, Kubernetes deployment design, monitoring strategy,
 and security best practices.
 
 The application exposes two REST endpoints:
@@ -15,8 +15,11 @@ The application exposes two REST endpoints:
 
 **High-Level Flow:**
 
-Developer → GitHub → CI/CD Pipeline (Jenkins) → Docker Hub  
-→ Kubernetes Cluster (EKS / Local) → Monitoring & Alerts
+Developer → GitHub  
+→ CI/CD Pipeline (Jenkins)  
+→ Docker Hub  
+→ Kubernetes Cluster (EKS / Local)  
+→ Monitoring & Alerts
 
 ---
 
@@ -24,81 +27,86 @@ Developer → GitHub → CI/CD Pipeline (Jenkins) → Docker Hub
 
 ### Technology Stack
 - Language: Python (FastAPI)
-- Container: Docker (multi-stage build)
-- Runtime: Non-root container user
-- Health Check: Docker + Kubernetes probes
+- Containerization: Docker
+- CI/CD Tool: Jenkins
+- Orchestration: Kubernetes (design + manifests)
 
-### Docker Features
+### Docker Implementation
 - Multi-stage Dockerfile
-- Non-root execution
-- Exposed health endpoint
+- Non-root container execution
 - Lightweight base image
+- Health check endpoint exposed
+
+Docker image is built and pushed to Docker Hub via Jenkins pipeline.
 
 ---
 
 ## 2. CI/CD Pipeline (Jenkins)
 
-### CI Steps
+### Continuous Integration (CI)
 - Source code checkout from GitHub
-- Application test execution
+- Application build and validation
 - Docker image build
 - Docker image push to Docker Hub
 
-### CD Steps
-- Kubernetes manifests prepared for deployment
-- Supports rolling update strategy
+### Continuous Deployment (CD)
+- Kubernetes deployment manifests prepared
+- Rolling update strategy configured
 - Designed for EKS / KIND / Docker Desktop Kubernetes
+
+Pipeline automation ensures repeatable and reliable deployments.
 
 ---
 
 ## 3. Kubernetes Deployment
 
 ### Kubernetes Resources
-- Deployment (replicas, rolling update)
+- Deployment (replicas, rolling updates)
 - Service (ClusterIP / NodePort)
-- Liveness & Readiness probes
-- Resource requests & limits
+- Liveness and readiness probes
+- Resource requests and limits
 
 ### Deployment Status
 Due to Docker Desktop Kubernetes cluster initialization issues on the local system,
-live deployment could not be completed within the assignment timeline.
+live cluster deployment could not be completed within the assignment timeline.
 
 However:
-- All Kubernetes manifests are production-ready
-- Manifests are compatible with AWS EKS and KIND clusters
-- Rolling updates and health checks are fully configured
+- Kubernetes manifests are production-ready
+- Compatible with AWS EKS and KIND clusters
+- Health probes and rolling update strategy are fully configured
 
 ---
 
 ## 4. Monitoring & Alerts (Design)
 
-### Metrics
+### Metrics Considered
 - CPU utilization
 - Memory utilization
 - Pod restart count
 - Health check failures
 
-### Dashboard
+### Dashboard Design
 Monitoring is designed using:
 - AWS CloudWatch Container Insights (for EKS)
-- OR Grafana dashboards
+- OR Grafana dashboards (Prometheus-based)
 
-### Alerts Configured
+### Alert Strategy
+
 | Alert Type | Threshold |
-|----------|-----------|
-High CPU Usage | >70% for 5 minutes |
-High Memory Usage | >80% |
-Health Check Failure | Liveness probe failure |
+|-----------|----------|
+| High CPU Usage | > 70% for 5 minutes |
+| High Memory Usage | > 80% |
+| Health Check Failure | Liveness probe failure |
 
 ---
 
 ## 5. Security Best Practices
 
-- Least-privilege IAM roles (for EKS / CI)
+- Least-privilege IAM roles (CI/CD and Kubernetes)
 - No credentials stored in GitHub repository
 - Secrets managed via AWS Secrets Manager / SSM (design)
-- HTTPS enforced via Ingress / Load Balancer (production design)
-- Container runs as non-root user
+- HTTPS enforced using Load Balancer / Ingress (production design)
+- Container runs as a non-root user
 
 ---
 
